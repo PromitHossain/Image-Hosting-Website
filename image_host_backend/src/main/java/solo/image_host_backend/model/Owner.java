@@ -2,8 +2,8 @@ package solo.image_host_backend.model;
 
 import java.time.LocalDate;
 
-public class Owner extends Account {
-
+public class Owner extends Account
+{
 
   public Owner(String aUsername, String aPassword, LocalDate aDateOfCreation)
   {

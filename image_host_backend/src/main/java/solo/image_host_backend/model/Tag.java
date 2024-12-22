@@ -1,41 +1,70 @@
 package solo.image_host_backend.model;
+/*PLEASE DO NOT EDIT THIS CODE*/
+/*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
-public class Tag {
-private int tagID;
-private String name;
- 
-public Tag(int aTagID, String aName) {
+
+
+// line 52 "model.ump"
+// line 141 "model.ump"
+public class Tag
+{
+
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
+
+  //Tag Attributes
+  private int tagID;
+  private String name;
+
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
+
+  public Tag(int aTagID, String aName)
+  {
     tagID = aTagID;
     name = aName;
-}
+  }
 
-public boolean setTagID(int aTagID) {
+  //------------------------
+  // INTERFACE
+  //------------------------
+
+  public boolean setTagID(int aTagID)
+  {
     boolean wasSet = false;
     tagID = aTagID;
     wasSet = true;
     return wasSet;
-}
+  }
 
-public boolean setName(String aName) {
+  public boolean setName(String aName)
+  {
     boolean wasSet = false;
     name = aName;
     wasSet = true;
     return wasSet;
-}
+  }
 
-public int getTagID() {
+  public int getTagID()
+  {
     return tagID;
-}
+  }
 
-public String getName() {
+  public String getName()
+  {
     return name;
-}
+  }
 
-public void delete() {}
+  public void delete()
+  {}
 
-public String toString() {
+
+  public String toString()
+  {
     return super.toString() + "["+
-    "tagID" + ":" + getTagID()+ "," +
-    "name" + ":" + getName()+ "]";
-}
+            "tagID" + ":" + getTagID()+ "," +
+            "name" + ":" + getName()+ "]";
+  }
 }

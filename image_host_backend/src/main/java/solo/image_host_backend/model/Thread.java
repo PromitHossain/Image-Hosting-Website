@@ -5,7 +5,6 @@ import java.time.LocalDate;
 public class Thread
 {
 
-  
   public enum ApprovalStatus { Pending, Approved }
 
   private int threadID;
@@ -13,16 +12,21 @@ public class Thread
   private LocalDate dateOfApproval;
   private int likeCount;
   private ApprovalStatus currentApprocalStatus;
+  private Account threadPoster;
 
-  public Thread(int aThreadID, LocalDate aDateOfPost, LocalDate aDateOfApproval, int aLikeCount, ApprovalStatus aCurrentApprocalStatus)
+  public Thread(int aThreadID, LocalDate aDateOfPost, LocalDate aDateOfApproval, int aLikeCount, ApprovalStatus aCurrentApprocalStatus, Account aThreadPoster)
   {
     threadID = aThreadID;
     dateOfPost = aDateOfPost;
     dateOfApproval = aDateOfApproval;
     likeCount = aLikeCount;
     currentApprocalStatus = aCurrentApprocalStatus;
+    if (!setThreadPoster(aThreadPoster))
+    {
+      throw new RuntimeException("Unable to create Thread due to aThreadPoster. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
   }
-
+  
   public boolean setThreadID(int aThreadID)
   {
     boolean wasSet = false;
@@ -87,9 +91,27 @@ public class Thread
   {
     return currentApprocalStatus;
   }
+  /* Code from template association_GetOne */
+  public Account getThreadPoster()
+  {
+    return threadPoster;
+  }
+  /* Code from template association_SetUnidirectionalOne */
+  public boolean setThreadPoster(Account aNewThreadPoster)
+  {
+    boolean wasSet = false;
+    if (aNewThreadPoster != null)
+    {
+      threadPoster = aNewThreadPoster;
+      wasSet = true;
+    }
+    return wasSet;
+  }
 
   public void delete()
-  {}
+  {
+    threadPoster = null;
+  }
 
 
   public String toString()
@@ -99,6 +121,7 @@ public class Thread
             "likeCount" + ":" + getLikeCount()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "dateOfPost" + "=" + (getDateOfPost() != null ? !getDateOfPost().equals(this)  ? getDateOfPost().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "dateOfApproval" + "=" + (getDateOfApproval() != null ? !getDateOfApproval().equals(this)  ? getDateOfApproval().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "currentApprocalStatus" + "=" + (getCurrentApprocalStatus() != null ? !getCurrentApprocalStatus().equals(this)  ? getCurrentApprocalStatus().toString().replaceAll("  ","    ") : "this" : "null");
+            "  " + "currentApprocalStatus" + "=" + (getCurrentApprocalStatus() != null ? !getCurrentApprocalStatus().equals(this)  ? getCurrentApprocalStatus().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "threadPoster = "+(getThreadPoster()!=null?Integer.toHexString(System.identityHashCode(getThreadPoster())):"null");
   }
 }
