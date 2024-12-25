@@ -1,13 +1,28 @@
 package solo.image_host_backend.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+
 import java.time.LocalDate;
 
+@Entity
 public class Like
 {
+  @Column(name = "like_date")
   private LocalDate dateOfLike;
-
+  
+   //-----------------------------------------
+  @ManyToOne
+  @Column(name = "user_who_liked")
   private Account userWhoLiked;
+
+  @ManyToOne
+  @Column(name = "liked_thread")
   private Thread likedThread;
+   //-----------------------------------------
+
+  protected Like() {}
 
   public Like(LocalDate aDateOfLike, Account aUserWhoLiked, Thread aLikedThread)
   {

@@ -1,10 +1,19 @@
 package solo.image_host_backend.model;
 
-public class BookmarkItem
-{
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 
+@Entity
+public class BookmarkItem {
+
+   //-----------------------------------------
   private Account user;
+
+  @Column(name = "bookmarked_thread")
   private Thread bookmarkedThread;
+   //-----------------------------------------
+
+  protected BookmarkItem() {}
 
   public BookmarkItem(Account aUser, Thread aBookmarkedThread)
   {

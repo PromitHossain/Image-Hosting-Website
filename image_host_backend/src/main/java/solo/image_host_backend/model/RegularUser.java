@@ -1,12 +1,16 @@
 package solo.image_host_backend.model;
 
+import jakarta.persistence.Entity;
 import java.time.LocalDate;
 
+@Entity
 public class RegularUser extends Account
 {
   public enum AccountStatus { Active, Archived }
 
   private AccountStatus accountStatus;
+
+  protected RegularUser() {}
 
   public RegularUser(String aUsername, String aPassword, LocalDate aDateOfCreation, AccountStatus aAccountStatus)
   {

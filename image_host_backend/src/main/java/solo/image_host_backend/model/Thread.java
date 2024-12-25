@@ -2,31 +2,54 @@ package solo.image_host_backend.model;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+
+@Entity
 public class Thread
 {
 
   public enum ApprovalStatus { Pending, Approved }
 
+  @Id
+  @GeneratedValue
   private int threadID;
-  private LocalDate dateOfPost;
-  private LocalDate dateOfApproval;
-  private int likeCount;
-  private ApprovalStatus currentApprocalStatus;
-  private Account threadPoster;
 
-  public Thread(int aThreadID, LocalDate aDateOfPost, LocalDate aDateOfApproval, int aLikeCount, ApprovalStatus aCurrentApprocalStatus, Account aThreadPoster)
+  @Column(name = "post_date")
+  private LocalDate postDate;
+  
+  @Column(name = "approval_date")
+  private LocalDate approvalDate;
+  
+  private int likeCount;
+  
+  @Column(name = "current_approval_status")
+  private ApprovalStatus currentApprovalStatus;
+  
+   //-----------------------------------------
+  @ManyToOne
+  @Column(name = "thread_poster")
+  private Account threadPoster;
+   //-----------------------------------------
+
+  protected Thread() {}
+
+  public Thread(int aThreadID, LocalDate aPostDate, LocalDate anApprovalDate, int aLikeCount, ApprovalStatus aCurrentApprovalStatus, Account aThreadPoster)
   {
     threadID = aThreadID;
-    dateOfPost = aDateOfPost;
-    dateOfApproval = aDateOfApproval;
+    postDate = aPostDate;
+    approvalDate = anApprovalDate;
     likeCount = aLikeCount;
-    currentApprocalStatus = aCurrentApprocalStatus;
+    currentApprovalStatus = aCurrentApprovalStatus;
     if (!setThreadPoster(aThreadPoster))
     {
       throw new RuntimeException("Unable to create Thread due to aThreadPoster. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
-  
+
   public boolean setThreadID(int aThreadID)
   {
     boolean wasSet = false;
@@ -35,18 +58,18 @@ public class Thread
     return wasSet;
   }
 
-  public boolean setDateOfPost(LocalDate aDateOfPost)
+  public boolean setPostDate(LocalDate aPostDate)
   {
     boolean wasSet = false;
-    dateOfPost = aDateOfPost;
+    postDate = aPostDate;
     wasSet = true;
     return wasSet;
   }
 
-  public boolean setDateOfApproval(LocalDate aDateOfApproval)
+  public boolean setApprovalDate(LocalDate aDateOfApproval)
   {
     boolean wasSet = false;
-    dateOfApproval = aDateOfApproval;
+    approvalDate = aDateOfApproval;
     wasSet = true;
     return wasSet;
   }
@@ -59,10 +82,10 @@ public class Thread
     return wasSet;
   }
 
-  public boolean setCurrentApprocalStatus(ApprovalStatus aCurrentApprocalStatus)
+  public boolean setCurrentApprovalStatus(ApprovalStatus aCurrentApprocalStatus)
   {
     boolean wasSet = false;
-    currentApprocalStatus = aCurrentApprocalStatus;
+    currentApprovalStatus = aCurrentApprocalStatus;
     wasSet = true;
     return wasSet;
   }
@@ -72,14 +95,14 @@ public class Thread
     return threadID;
   }
 
-  public LocalDate getDateOfPost()
+  public LocalDate getPostDate()
   {
-    return dateOfPost;
+    return postDate;
   }
 
-  public LocalDate getDateOfApproval()
+  public LocalDate getApprovalDate()
   {
-    return dateOfApproval;
+    return approvalDate;
   }
 
   public int getLikeCount()
@@ -87,9 +110,9 @@ public class Thread
     return likeCount;
   }
 
-  public ApprovalStatus getCurrentApprocalStatus()
+  public ApprovalStatus getCurrentApprovalStatus()
   {
-    return currentApprocalStatus;
+    return currentApprovalStatus;
   }
   /* Code from template association_GetOne */
   public Account getThreadPoster()
@@ -119,9 +142,9 @@ public class Thread
     return super.toString() + "["+
             "threadID" + ":" + getThreadID()+ "," +
             "likeCount" + ":" + getLikeCount()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "dateOfPost" + "=" + (getDateOfPost() != null ? !getDateOfPost().equals(this)  ? getDateOfPost().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "dateOfApproval" + "=" + (getDateOfApproval() != null ? !getDateOfApproval().equals(this)  ? getDateOfApproval().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "currentApprocalStatus" + "=" + (getCurrentApprocalStatus() != null ? !getCurrentApprocalStatus().equals(this)  ? getCurrentApprocalStatus().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "dateOfPost" + "=" + (getPostDate() != null ? !getPostDate().equals(this)  ? getPostDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "dateOfApproval" + "=" + (getApprovalDate() != null ? !getApprovalDate().equals(this)  ? getApprovalDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "currentApprocalStatus" + "=" + (getCurrentApprovalStatus() != null ? !getCurrentApprovalStatus().equals(this)  ? getCurrentApprovalStatus().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "threadPoster = "+(getThreadPoster()!=null?Integer.toHexString(System.identityHashCode(getThreadPoster())):"null");
   }
 }

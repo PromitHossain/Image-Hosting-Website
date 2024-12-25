@@ -1,12 +1,24 @@
 package solo.image_host_backend.model;
 
 import java.time.LocalDate;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
 
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Account {
 
+  @Id
   private String username;
   private String password;
+
+  @Column(name = "creation_date")
   private LocalDate dateOfCreation;
+
+  protected Account() {}
 
   public Account(String aUsername, String aPassword, LocalDate aDateOfCreation)
   {

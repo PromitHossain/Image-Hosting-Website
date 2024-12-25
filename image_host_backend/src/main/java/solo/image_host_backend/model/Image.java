@@ -1,11 +1,27 @@
 package solo.image_host_backend.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+
+@Entity
 public class Image
 {
 
+  @Id
+  @GeneratedValue
   private int imageID;
+  private String imageURL;
 
+   //-----------------------------------------
+   // will handle threads without images in service layer
+  @OneToOne(optional=true)
   private Thread attachedThread;
+   //-----------------------------------------
+
+
+  protected Image() {}
 
   public Image(int aImageID, Thread aAttachedThread)
   {

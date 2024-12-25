@@ -1,10 +1,21 @@
 package solo.image_host_backend.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+
+@Entity
 public class ThreadTag
 {
 
+  //-----------------------------------------
+  @ManyToOne
   private Thread taggedThread;
+
+  @ManyToOne
   private Tag selectedTag;
+   //-----------------------------------------
+
+  protected ThreadTag() {}
 
   public ThreadTag(Thread aTaggedThread, Tag aSelectedTag)
   {

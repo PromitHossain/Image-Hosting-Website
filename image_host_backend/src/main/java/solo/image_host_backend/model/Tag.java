@@ -1,35 +1,24 @@
 package solo.image_host_backend.model;
-/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 
-
-// line 52 "model.ump"
-// line 141 "model.ump"
+@Entity
 public class Tag
 {
-
-  //------------------------
-  // MEMBER VARIABLES
-  //------------------------
-
-  //Tag Attributes
+  @Id
+  @GeneratedValue
   private int tagID;
   private String name;
 
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
+  protected Tag() {}
 
   public Tag(int aTagID, String aName)
   {
     tagID = aTagID;
     name = aName;
   }
-
-  //------------------------
-  // INTERFACE
-  //------------------------
 
   public boolean setTagID(int aTagID)
   {
