@@ -2,21 +2,32 @@ package solo.image_host_backend.model;
 
 import java.time.LocalDate;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 
 @Entity
+@Table(name = "account")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Account {
 
   @Id
+  @GeneratedValue
+  @Column(name = "user_id")
+  private int userID;
+  
+  @Column(columnDefinition = "VARCHAR(50) UNIQUE NOT NULL")
   private String username;
+  
+  @Column(columnDefinition = "VARCHAR(50) NOT NULL")
   private String password;
 
+  // results in DATE only in SQL (no time)
   @Column(name = "creation_date")
-  private LocalDate dateOfCreation;
+  private LocalDate creationDate;
 
   protected Account() {}
 
@@ -24,7 +35,7 @@ public class Account {
   {
     username = aUsername;
     password = aPassword;
-    dateOfCreation = aDateOfCreation;
+    creationDate = aDateOfCreation;
   }
 
   public boolean setUsername(String aUsername)
@@ -43,10 +54,10 @@ public class Account {
     return wasSet;
   }
 
-  public boolean setDateOfCreation(LocalDate aDateOfCreation)
+  public boolean setCreationDate(LocalDate aDateOfCreation)
   {
     boolean wasSet = false;
-    dateOfCreation = aDateOfCreation;
+    creationDate = aDateOfCreation;
     wasSet = true;
     return wasSet;
   }
@@ -61,9 +72,13 @@ public class Account {
     return password;
   }
 
-  public LocalDate getDateOfCreation()
+  public int getUserID() {
+    return userID;
+  }
+
+  public LocalDate getCreationDate()
   {
-    return dateOfCreation;
+    return creationDate;
   }
 
   public void delete()
@@ -75,6 +90,6 @@ public class Account {
     return super.toString() + "["+
             "username" + ":" + getUsername()+ "," +
             "password" + ":" + getPassword()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "dateOfCreation" + "=" + (getDateOfCreation() != null ? !getDateOfCreation().equals(this)  ? getDateOfCreation().toString().replaceAll("  ","    ") : "this" : "null");
+            "  " + "dateOfCreation" + "=" + (getCreationDate() != null ? !getCreationDate().equals(this)  ? getCreationDate().toString().replaceAll("  ","    ") : "this" : "null");
   }
 }

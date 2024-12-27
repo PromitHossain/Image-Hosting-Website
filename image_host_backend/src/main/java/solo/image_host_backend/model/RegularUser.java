@@ -1,5 +1,6 @@
 package solo.image_host_backend.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import java.time.LocalDate;
 
@@ -8,6 +9,7 @@ public class RegularUser extends Account
 {
   public enum AccountStatus { Active, Archived }
 
+  @Column(name = "account_status", nullable = false)
   private AccountStatus accountStatus;
 
   protected RegularUser() {}

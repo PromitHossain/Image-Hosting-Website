@@ -6,9 +6,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "thread")
 public class Thread
 {
 
@@ -16,6 +19,7 @@ public class Thread
 
   @Id
   @GeneratedValue
+  @Column(name = "thread_id")
   private int threadID;
 
   @Column(name = "post_date")
@@ -24,22 +28,22 @@ public class Thread
   @Column(name = "approval_date")
   private LocalDate approvalDate;
   
+  @Column(name = "like_count")
   private int likeCount;
   
-  @Column(name = "current_approval_status")
+  @Column(name = "current_approval_status", nullable = false)
   private ApprovalStatus currentApprovalStatus;
   
    //-----------------------------------------
   @ManyToOne
-  @Column(name = "thread_poster")
+  @JoinColumn(name = "user_id", referencedColumnName = "user_id")
   private Account threadPoster;
    //-----------------------------------------
 
   protected Thread() {}
 
-  public Thread(int aThreadID, LocalDate aPostDate, LocalDate anApprovalDate, int aLikeCount, ApprovalStatus aCurrentApprovalStatus, Account aThreadPoster)
+  public Thread(LocalDate aPostDate, LocalDate anApprovalDate, int aLikeCount, ApprovalStatus aCurrentApprovalStatus, Account aThreadPoster)
   {
-    threadID = aThreadID;
     postDate = aPostDate;
     approvalDate = anApprovalDate;
     likeCount = aLikeCount;

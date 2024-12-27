@@ -1,8 +1,10 @@
 package solo.image_host_backend.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -11,21 +13,24 @@ public class Image
 
   @Id
   @GeneratedValue
+  @Column(name = "image_id")
   private int imageID;
+
+  @Column(name = "image_url")
   private String imageURL;
 
    //-----------------------------------------
    // will handle threads without images in service layer
-  @OneToOne(optional=true)
+  @OneToOne(optional=false)
+  @JoinColumn(name = "attached_thread_id", nullable = false, referencedColumnName = "thread_id")
   private Thread attachedThread;
    //-----------------------------------------
 
 
   protected Image() {}
 
-  public Image(int aImageID, Thread aAttachedThread)
+  public Image(Thread aAttachedThread)
   {
-    imageID = aImageID;
     if (!setAttachedThread(aAttachedThread))
     {
       throw new RuntimeException("Unable to create Image due to aAttachedThread. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");

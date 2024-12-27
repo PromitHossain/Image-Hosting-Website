@@ -1,17 +1,22 @@
 package solo.image_host_backend.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "thread_tag")
 public class ThreadTag
 {
 
   //-----------------------------------------
   @ManyToOne
+  @JoinColumn(name = "thread_id", referencedColumnName = "thread_id")
   private Thread taggedThread;
 
   @ManyToOne
+  @JoinColumn(name = "tag_id", referencedColumnName = "tag_id")
   private Tag selectedTag;
    //-----------------------------------------
 

@@ -1,23 +1,29 @@
 package solo.image_host_backend.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
-public class Tag
-{
+@Table(name = "tag")
+public class Tag {
+
   @Id
   @GeneratedValue
+  @Column(name = "tag_id")
   private int tagID;
-  private String name;
+
+  @Column(name = "tag_name")
+  private String tagName;
 
   protected Tag() {}
 
-  public Tag(int aTagID, String aName)
+  public Tag(String aTagName)
   {
-    tagID = aTagID;
-    name = aName;
+   tagName = aTagName;
+
   }
 
   public boolean setTagID(int aTagID)
@@ -28,10 +34,11 @@ public class Tag
     return wasSet;
   }
 
-  public boolean setName(String aName)
+  public boolean setName(String aTagName)
   {
     boolean wasSet = false;
-    name = aName;
+   tagName = aTagName;
+
     wasSet = true;
     return wasSet;
   }
@@ -43,17 +50,16 @@ public class Tag
 
   public String getName()
   {
-    return name;
+    return tagName;
   }
 
-  public void delete()
-  {}
+  public void delete() {}
 
 
   public String toString()
   {
     return super.toString() + "["+
             "tagID" + ":" + getTagID()+ "," +
-            "name" + ":" + getName()+ "]";
+             "tagName" + ":" + getName() + "]";
   }
 }

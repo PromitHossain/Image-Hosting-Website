@@ -6,8 +6,9 @@ import jakarta.persistence.Entity;
 @Entity
 public class BookmarkItem {
 
-   //-----------------------------------------
-  private Account user;
+  //-----------------------------------------
+  @Column(name = "username")
+  private Account username;
 
   @Column(name = "bookmarked_thread")
   private Thread bookmarkedThread;
@@ -29,7 +30,7 @@ public class BookmarkItem {
 
   public Account getUser()
   {
-    return user;
+    return username;
   }
   
   public Thread getBookmarkedThread()
@@ -42,7 +43,7 @@ public class BookmarkItem {
     boolean wasSet = false;
     if (aNewUser != null)
     {
-      user = aNewUser;
+      username = aNewUser;
       wasSet = true;
     }
     return wasSet;
@@ -61,7 +62,7 @@ public class BookmarkItem {
 
   public void delete()
   {
-    user = null;
+    username = null;
     bookmarkedThread = null;
   }
 
