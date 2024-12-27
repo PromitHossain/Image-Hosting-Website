@@ -9,6 +9,7 @@ import jakarta.persistence.Table;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name = "account_thread")
@@ -19,33 +20,16 @@ public class Like
   
   //-----------------------------------------
   @EmbeddedId
-  private Key key;
-
-
-
-  @ManyToOne
-  @Column(name = "user_who_liked")
-  private Account userWhoLiked;
-
-  @ManyToOne
-  @Column(name = "liked_thread")
-  private Thread likedThread;
+  private LikeId key;
    //-----------------------------------------
 
   protected Like() {}
 
-  public Like(Key aKey, LocalDate aLikeDate, Account aUserWhoLiked, Thread aLikedThread)
+  public Like(LikeId aKey, LocalDate aLikeDate, Account aUserWhoLiked, Thread aLikedThread)
   {
     key = aKey;
     likeDate = aLikeDate;
-    if (!setUserWhoLiked(aUserWhoLiked))
-    {
-      throw new RuntimeException("Unable to create Like due to aUserWhoLiked. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    if (!setLikedThread(aLikedThread))
-    {
-      throw new RuntimeException("Unable to create Like due to aLikedThread. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
+    
   }
 
   public boolean setLikeDate(LocalDate aLikeDate)
@@ -60,56 +44,9 @@ public class Like
   {
     return likeDate;
   }
-  
-  public Account getUserWhoLiked()
-  {
-    return userWhoLiked;
-  }
-  
-  public Thread getLikedThread()
-  {
-    return likedThread;
-  }
-  
-  public boolean setUserWhoLiked(Account aNewUserWhoLiked)
-  {
-    boolean wasSet = false;
-    if (aNewUserWhoLiked != null)
-    {
-      userWhoLiked = aNewUserWhoLiked;
-      wasSet = true;
-    }
-    return wasSet;
-  }
-  
-  public boolean setLikedThread(Thread aNewLikedThread)
-  {
-    boolean wasSet = false;
-    if (aNewLikedThread != null)
-    {
-      likedThread = aNewLikedThread;
-      wasSet = true;
-    }
-    return wasSet;
-  }
-
-  public void delete()
-  {
-    userWhoLiked = null;
-    likedThread = null;
-  }
-
-
-  public String toString()
-  {
-    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "likeDate" + "=" + (getLikeDate() != null ? !getLikeDate().equals(this)  ? getLikeDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "userWhoLiked = "+(getUserWhoLiked()!=null?Integer.toHexString(System.identityHashCode(getUserWhoLiked())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "likedThread = "+(getLikedThread()!=null?Integer.toHexString(System.identityHashCode(getLikedThread())):"null");
-  }
 
   @Embeddable
-  public static class Key implements Serializable {
+  public static class LikeId implements Serializable {
     @ManyToOne
     @Column(name = "user_id")
     private Account userWhoLiked;
@@ -118,11 +55,11 @@ public class Like
     @Column(name = "thread_id")
     private Thread likedThread;
 
-    public Key() {
+    public LikeId() {
       super();
     }
 
-    public Key(Account userWhoLiked, Thread likedThread) {
+    public LikeId(Account userWhoLiked, Thread likedThread) {
       this.userWhoLiked = userWhoLiked;
       this.likedThread = likedThread;
     }
@@ -134,5 +71,27 @@ public class Like
     public Thread getLikedThread() {
       return likedThread;
     }
+
+    @Override 
+    public int hashCode() {
+      return Objects.hash(this.getUserWhoLikedAccount().getUserID(), this.getLikedThread().getThreadID());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (!(o instanceof LikeId)) {
+        return false;
+      }
+
+      LikeId validatingLike = (LikeId) o;
+      
+      if (this.getUserWhoLikedAccount().getUserID() == validatingLike.getUserWhoLikedAccount().getUserID() && this.getLikedThread().getThreadID() == validatingLike.likedThread.getThreadID()) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+
   }
 }
