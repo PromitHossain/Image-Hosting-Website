@@ -1,75 +1,78 @@
 package solo.image_host_backend.model;
 
+import java.io.Serializable;
+import java.util.Objects;
+
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+
 @Entity
 @Table(name = "thread_tag")
-public class ThreadTag
-{
+public class ThreadTag {
 
-  //-----------------------------------------
-  @ManyToOne
-  @JoinColumn(name = "thread_id", referencedColumnName = "thread_id")
-  private Thread taggedThread;
-
-  @ManyToOne
-  @JoinColumn(name = "tag_id", referencedColumnName = "tag_id")
-  private Tag selectedTag;
-   //-----------------------------------------
+  @EmbeddedId
+  ThreadTagIdKey key;
 
   protected ThreadTag() {}
 
-  public ThreadTag(Thread aTaggedThread, Tag aSelectedTag)
-  {
-    if (!setTaggedThread(aTaggedThread))
-    {
-      throw new RuntimeException("Unable to create ThreadTag due to aTaggedThread. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    if (!setSelectedTag(aSelectedTag))
-    {
-      throw new RuntimeException("Unable to create ThreadTag due to aSelectedTag. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
+  public ThreadTag(ThreadTagIdKey aKey) {
+    key = aKey;
   }
 
-  public Thread getTaggedThread()
-  {
-    return taggedThread;
-  }
-  
-  public Tag getSelectedTag()
-  {
-    return selectedTag;
-  }
-  
-  public boolean setTaggedThread(Thread aNewTaggedThread)
-  {
-    boolean wasSet = false;
-    if (aNewTaggedThread != null)
-    {
-      taggedThread = aNewTaggedThread;
-      wasSet = true;
+  @Embeddable 
+  public static class ThreadTagIdKey implements Serializable {
+    @ManyToOne
+    @JoinColumn(name = "thread_id")
+    private Thread taggedThread;
+
+    @ManyToOne
+    @JoinColumn(name = "tag_id")
+    private Tag selectedTag;
+
+    protected ThreadTagIdKey() {
+      super();
     }
-    return wasSet;
-  }
-  
-  public boolean setSelectedTag(Tag aNewSelectedTag)
-  {
-    boolean wasSet = false;
-    if (aNewSelectedTag != null)
-    {
-      selectedTag = aNewSelectedTag;
-      wasSet = true;
+
+    public ThreadTagIdKey(Thread aThread, Tag aTag) {
+      this.selectedTag = aTag;
+      this.taggedThread = aThread;
     }
-    return wasSet;
+
+    public Thread getTaggedThread() {
+      return taggedThread;
+    }
+
+    public Tag getSelectedTag() {
+      return selectedTag;
+    }
+
+    @Override 
+    public int hashCode() {
+      return Objects.hash(this.getTaggedThread(), this.getSelectedTag());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (!(o instanceof ThreadTagIdKey)) {
+        return false;
+      }
+
+      ThreadTagIdKey validatingSelectedThreadTag = (ThreadTagIdKey) o;
+      
+      if (this.getTaggedThread().getThreadID() == validatingSelectedThreadTag.getTaggedThread().getThreadID() && this.getSelectedTag().getTagID() == validatingSelectedThreadTag.getSelectedTag().getTagID()) {
+        return true;
+      } else {
+        return false;
+      }
+    } 
+
   }
 
-  public void delete()
-  {
-    taggedThread = null;
-    selectedTag = null;
-  }
+  
 
 }

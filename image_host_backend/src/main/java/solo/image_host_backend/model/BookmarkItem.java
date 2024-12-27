@@ -1,69 +1,83 @@
 package solo.image_host_backend.model;
 
-import jakarta.persistence.Column;
+import java.io.Serializable;
+import java.util.Objects;
+
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "bookmark_item")
 public class BookmarkItem {
 
-  //-----------------------------------------
-  @Column(name = "username")
-  private Account username;
-
-  @Column(name = "bookmarked_thread")
-  private Thread bookmarkedThread;
-   //-----------------------------------------
-
+  @EmbeddedId
+  private BookmarkIdKey key;
+  
   protected BookmarkItem() {}
 
-  public BookmarkItem(Account aUser, Thread aBookmarkedThread)
+  public BookmarkItem(BookmarkIdKey aKey)
   {
-    if (!setUser(aUser))
-    {
-      throw new RuntimeException("Unable to create BookmarkItem due to aUser. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    if (!setBookmarkedThread(aBookmarkedThread))
-    {
-      throw new RuntimeException("Unable to create BookmarkItem due to aBookmarkedThread. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
+    key = aKey;
   }
 
-  public Account getUser()
-  {
-    return username;
-  }
-  
-  public Thread getBookmarkedThread()
-  {
-    return bookmarkedThread;
-  }
-  
-  public boolean setUser(Account aNewUser)
-  {
-    boolean wasSet = false;
-    if (aNewUser != null)
-    {
-      username = aNewUser;
-      wasSet = true;
-    }
-    return wasSet;
-  }
-  
-  public boolean setBookmarkedThread(Thread aNewBookmarkedThread)
-  {
-    boolean wasSet = false;
-    if (aNewBookmarkedThread != null)
-    {
-      bookmarkedThread = aNewBookmarkedThread;
-      wasSet = true;
-    }
-    return wasSet;
+  public BookmarkIdKey getBookmarkIdKey() {
+    return key;
   }
 
-  public void delete()
-  {
-    username = null;
-    bookmarkedThread = null;
+  @Embeddable
+  public static class BookmarkIdKey implements Serializable {
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Account userWhoBookmarked;
+
+    @ManyToOne
+    @JoinColumn(name = "bookmarked_thread")
+    private Thread bookmarkedThread;
+
+    protected BookmarkIdKey() {
+      super();
+    }
+
+    public BookmarkIdKey(Account aUser, Thread aThread) {
+      this.userWhoBookmarked = aUser;
+      this.bookmarkedThread = aThread;
+    }
+
+    public Account getUserWhoBookmarkedAccount() {
+      return userWhoBookmarked;
+    }
+
+    public Thread getBookmarkedThread() {
+      return bookmarkedThread;
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(this.getUserWhoBookmarkedAccount().getUserID(), this.getBookmarkedThread().getThreadID());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (!(o instanceof BookmarkIdKey)) {
+        return false;
+      }
+
+      BookmarkIdKey validatingBookmark = (BookmarkIdKey) o;
+      
+      if (this.getUserWhoBookmarkedAccount().getUserID() == validatingBookmark.getUserWhoBookmarkedAccount().getUserID() && this.getBookmarkedThread().getThreadID() == validatingBookmark.getBookmarkedThread().getThreadID()) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    
+
   }
+ 
 
 }

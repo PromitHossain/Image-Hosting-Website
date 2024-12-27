@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -12,24 +13,22 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
-@Table(name = "account_thread")
-public class Like
-{
+@Table(name = "like")
+public class Like {
   @Column(name = "like_date")
   private LocalDate likeDate;
   
   //-----------------------------------------
   @EmbeddedId
-  private LikeId key;
-   //-----------------------------------------
+  private LikeIdKey key;
+  //-----------------------------------------
 
   protected Like() {}
 
-  public Like(LikeId aKey, LocalDate aLikeDate, Account aUserWhoLiked, Thread aLikedThread)
+  public Like(LikeIdKey aKey, LocalDate aLikeDate)
   {
     key = aKey;
     likeDate = aLikeDate;
-    
   }
 
   public boolean setLikeDate(LocalDate aLikeDate)
@@ -45,23 +44,27 @@ public class Like
     return likeDate;
   }
 
+  public LikeIdKey getLikeIdKey() {
+    return key;
+  }
+
   @Embeddable
-  public static class LikeId implements Serializable {
+  public static class LikeIdKey implements Serializable {
     @ManyToOne
-    @Column(name = "user_id")
+    @JoinColumn(name = "user_id")
     private Account userWhoLiked;
 
     @ManyToOne
-    @Column(name = "thread_id")
+    @JoinColumn(name = "thread_id")
     private Thread likedThread;
 
-    public LikeId() {
+    protected LikeIdKey() {
       super();
     }
 
-    public LikeId(Account userWhoLiked, Thread likedThread) {
-      this.userWhoLiked = userWhoLiked;
-      this.likedThread = likedThread;
+    public LikeIdKey(Account aUser, Thread aThread) {
+      this.userWhoLiked = aUser;
+      this.likedThread = aThread;
     }
 
     public Account getUserWhoLikedAccount() {
@@ -79,11 +82,11 @@ public class Like
 
     @Override
     public boolean equals(Object o) {
-      if (!(o instanceof LikeId)) {
+      if (!(o instanceof LikeIdKey)) {
         return false;
       }
 
-      LikeId validatingLike = (LikeId) o;
+      LikeIdKey validatingLike = (LikeIdKey) o;
       
       if (this.getUserWhoLikedAccount().getUserID() == validatingLike.getUserWhoLikedAccount().getUserID() && this.getLikedThread().getThreadID() == validatingLike.likedThread.getThreadID()) {
         return true;
